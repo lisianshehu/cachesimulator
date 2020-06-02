@@ -1,5 +1,6 @@
 #ifndef META_DATA_H
 #define META_DATA_H
-void updateMetaData(int indexHit, int setNumber, int numberOfBlocks, int associativity, unsigned long long int **cache, int **metaData);
-int writeBackDataCheck(int writesMem, int setNumber, int numberOfBlocks, int associativity, int LRUIndex, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData);
+#include "Cache.h"
+extern void updateMetaData(Cache *cache, int set_number);
+extern int writeBackDataCheck(Cache *cache, int set_number, int replcIndex, unsigned long long int tag_address);
 #endif
