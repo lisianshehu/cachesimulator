@@ -1,23 +1,22 @@
 #include "meta_data.h"
 using namespace std;
 // updates metadata for a read/write hit
-void updateMetaData (int indexHit, int setNumber, int numberOfBlocks, int associativity, unsigned long long int **cache, int **metaData)
+void updateMetaData (Cache *cache, int set_number)
 {
-    for (int i = 0; i < associativity; i++)
+    for (int i = 0; i < cache->associativity; i++)
     {
-        if ((metaData[setNumber][i] < metaData[setNumber][indexHit]))
+        if ((cache->metaData[set_number][i] < cache->metaData[set_number][cache->cache_data.indexHit]))
         {
-            metaData[setNumber][i]++;
+            cache->metaData[set_number][i]++;
         }
     }
-    metaData[setNumber][indexHit] = 0;
+    cache->metaData[set_number][cache->cache_data.indexHit] = 0;
 }
 
-
 // checks for dirty bit to write back
-int writeBackDataCheck (int writesMem, int setNumber, int numberOfBlocks, int associativity, int replcIndex, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData)
+int writeBackDataCheck (Cache *cache, int set_number, int replcIndex, unsigned long long int tag_address)
 {
-    if (writeMetaData[setNumber][replcIndex] == 1)
+    if (cache->writeMetaData[set_number][replcIndex] == 1)
     {
         return 1;
     }

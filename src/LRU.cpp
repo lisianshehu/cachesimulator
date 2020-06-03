@@ -1,34 +1,33 @@
 #include "LRU.h"
-#include "meta_data.h"
 using namespace std;
 
 // inserts when there is free space in cache for LRU replacement 
-bool insertIntoFreeCacheLRU (string operation, int writePolicy, bool setFull, int setNumber, int numberOfBlocks, int associativity, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData)
+bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
-    if (cache[setNumber][associativity-1] != -1)
+    if (cache->cache[set_number][cache->associativity-1] != -1)
     {
         return true;
     }
     else 
     {
-        for (int i = 0; i < associativity; i++)
+        for (int i = 0; i < cache->associativity; i++)
         {
-            if (cache[setNumber][i] == -1)
+            if (cache->cache[set_number][i] == -1)
             {
-                cache[setNumber][i] = tagAddress;
+                cache->cache[set_number][i] = tag_address;
                 int newDataIndex = i;
                 // setFull = false;
-                for (int j = 0; j < associativity; j++)
+                for (int j = 0; j < cache->associativity; j++)
                 {
-                    if (metaData[setNumber][j] > -1)
+                    if (cache->metaData[set_number][j] > -1)
                     {
-                        metaData[setNumber][j]++;
+                        cache->metaData[set_number][j]++;
                     }
                 }
-                metaData[setNumber][newDataIndex] = 0;
-                if (operation == "W" && writePolicy == 1)
+                cache->metaData[set_number][newDataIndex] = 0;
+                if (operation == "W" && cache->writePolicy == 1)
                 {
-                    writeMetaData[setNumber][newDataIndex] = 1;
+                    cache->writeMetaData[set_number][newDataIndex] = 1;
                 } 
                 break;
             } 
@@ -38,40 +37,41 @@ bool insertIntoFreeCacheLRU (string operation, int writePolicy, bool setFull, in
 }
 
 // inserts into cache that is full with LRU replacement 
-int insertIntoFullCacheLRU (string operation, int writePolicy, int writesMem, int setNumber, int numberOfBlocks, int associativity, int maxPosition, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData)
+int insertIntoFullCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
     int writeBack = 0;
+    int maxPosition = 0;
     int LRUIndex = 0;
-    for (int i = 0; i < associativity; i++)
+    for (int i = 0; i < cache->associativity; i++)
     {
-        if (metaData[setNumber][i] > maxPosition)
+        if (cache->metaData[set_number][i] > maxPosition)
         {
-            maxPosition = metaData[setNumber][i];
+            maxPosition = cache->metaData[set_number][i];
             LRUIndex = i;
         }
     }
-    cache[setNumber][LRUIndex] = tagAddress;
-    for (int i = 0; i < associativity; i++)
+    cache->cache[set_number][LRUIndex] = tag_address;
+    for (int i = 0; i < cache->associativity; i++)
     {
-        if ((metaData[setNumber][i] < metaData[setNumber][LRUIndex]))
+        if ((cache->metaData[set_number][i] < cache->metaData[set_number][LRUIndex]))
         {
-            metaData[setNumber][i]++;
+            cache->metaData[set_number][i]++;
         }
     }
 
     // write-back algorithim for writing to memory if there is a dirty bit in place
-    if (writePolicy == 1)
+    if (cache->writePolicy == 1)
     {
-        writeBack = writeBackDataCheck(writesMem, setNumber, numberOfBlocks, associativity, LRUIndex, tagAddress, cache, metaData, writeMetaData);
+        writeBack = writeBackDataCheck(cache, set_number, LRUIndex, tag_address);
         if (operation == "R")
         {
-            writeMetaData[setNumber][LRUIndex] = 0; // sets dirty bit to 0 for a read-miss when new cache block is allocated
+            cache->writeMetaData[set_number][LRUIndex] = 0; // sets dirty bit to 0 for a read-miss when new cache block is allocated
         }
         else if (operation == "W")
         {
-            writeMetaData[setNumber][LRUIndex] = 1; // sets dirty bit to 1 for a write-miss when new cache block is allocated
+            cache->writeMetaData[set_number][LRUIndex] = 1; // sets dirty bit to 1 for a write-miss when new cache block is allocated
         }
     }
-    metaData[setNumber][LRUIndex] = 0;
+    cache->metaData[set_number][LRUIndex] = 0;
     return writeBack;
 }

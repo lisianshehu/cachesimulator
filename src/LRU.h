@@ -1,7 +1,9 @@
-#include <string>
 #ifndef LRU_H
 #define LRU_H
+#include <string>
+#include "Cache.h"
+#include "meta_data.h"
 using namespace std;
-bool insertIntoFreeCacheLRU(string operation, int writePolicy, bool setFull, int setNumber, int numberOfBlocks, int associativity, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData);
-int insertIntoFullCacheLRU(string operation, int writePolicy, int writesMem, int setNumber, int numberOfBlocks, int associativity, int maxPosition, unsigned long long int tagAddress, unsigned long long int **cache, int **metaData, int **writeMetaData);
+extern bool insertIntoFreeCacheLRU(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
+extern int insertIntoFullCacheLRU(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
 #endif
