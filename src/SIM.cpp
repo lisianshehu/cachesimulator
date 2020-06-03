@@ -55,14 +55,14 @@ int main(int argc, char** argv)
         // write operation
         if (operation == "W")
         {
-            perform_write(cache, operation, setNumber, tagAddress);
+            write_operation_control(cache, operation, setNumber, tagAddress);
 
             // reset variables
             cache->cache_data.hit = false;
         }
         else if (operation == "R") // read operation
         {   
-            perform_read(cache, operation, setNumber, tagAddress);
+            read_operation_control(cache, operation, setNumber, tagAddress);
         }
     }
 

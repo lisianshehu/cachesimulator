@@ -16,7 +16,7 @@ void Cache::initialize_cache()
     }
 
     // initialize struct to hold cache data
-    cache_data = {false, 0, 0, 0, 0, 0};
+    CacheData cache_data = {false, 0, 0, 0, 0, 0};
 }
 
 void Cache::initialize_metaData()

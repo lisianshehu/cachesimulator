@@ -1,7 +1,7 @@
 #include "FIFO.h"
 using namespace std;
 
-bool insertIntoFreeCacheFIFO(Cache *cache, string operation, int set_number, unsigned long long int tagAddress)
+bool insertIntoFreeCacheFIFO(Cache *cache, std::string operation, int set_number, unsigned long long int tagAddress)
 {
     if (cache->cache[set_number][cache->associativity-1] != -1)
     {
@@ -15,7 +15,6 @@ bool insertIntoFreeCacheFIFO(Cache *cache, string operation, int set_number, uns
             {
                 cache->cache[set_number][i] = tagAddress;
                 int newDataIndex = i;
-                // setFull = false;
                 cache->metaData[set_number][i] = newDataIndex+1;
                 if (operation == "W" && cache->writePolicy == 1)
                 {
@@ -29,7 +28,7 @@ bool insertIntoFreeCacheFIFO(Cache *cache, string operation, int set_number, uns
 }
 
 // inserts into cache using FIFO replacement with a full set
-int insertIntoFullCacheFIFO(Cache *cache, string operation, int set_number, unsigned long long int tagAddress)
+int insertIntoFullCacheFIFO(Cache *cache, std::string operation, int set_number, unsigned long long int tagAddress)
 {
     int FIFOIndex = 0;
     int writeBack = 0;

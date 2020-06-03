@@ -12,7 +12,7 @@ class Cache
         int **metaData;
         int **writeMetaData;
 
-        struct
+        struct CacheData
         {
             bool hit;
             int totalHits;

@@ -2,7 +2,7 @@
 using namespace std;
 
 // inserts when there is free space in cache for LRU replacement 
-bool insertIntoFreeCacheLRU (Cache *cache, string operation, int set_number, unsigned long long int tag_address)
+bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
     if (cache->cache[set_number][cache->associativity-1] != -1)
     {
@@ -37,7 +37,7 @@ bool insertIntoFreeCacheLRU (Cache *cache, string operation, int set_number, uns
 }
 
 // inserts into cache that is full with LRU replacement 
-int insertIntoFullCacheLRU (Cache *cache, string operation, int set_number, unsigned long long int tag_address)
+int insertIntoFullCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
     int writeBack = 0;
     int maxPosition = 0;
