@@ -1,10 +1,7 @@
 #include "read_operations.h"
 
-void perform_read(Cache *cache, string operation, int set_number, unsigned long long int tag_address)
+void read_operation_control(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
-    bool fullSet = false;
-    bool setFull = false;
-
     for (int i = 0; i < cache->associativity; i++)
     {
         if (cache->cache[set_number][i] == tag_address)
@@ -24,38 +21,45 @@ void perform_read(Cache *cache, string operation, int set_number, unsigned long 
     }
     else if (!cache->cache_data.hit) // perform cache miss process
     {
-        cache->cache_data.readsMem++;
-        cache->cache_data.totalMisses++;
-        if (!setFull)
-        {
-            if (cache->replacementPolicy == 0) // LRU replacement
-                fullSet = insertIntoFreeCacheLRU(cache, operation, set_number, tag_address);   
-
-            if (cache->replacementPolicy == 1) // FIFO replacement
-                fullSet = insertIntoFreeCacheFIFO(cache, operation, set_number, tag_address);
-        }
-
-        // checks for empty sets to place data and sets metadata to MRU data and decide which element to evict
-        if (fullSet)
-        {
-            int writeBack = 0;
-
-            // LRU replacement
-            if (cache->replacementPolicy == 0) 
-                writeBack = insertIntoFullCacheLRU(cache, operation, set_number, tag_address);
-            
-            // FIFO replacement
-            if (cache->replacementPolicy == 1) 
-                writeBack = insertIntoFullCacheFIFO(cache, operation, set_number, tag_address);
-            
-            // writes memory if a write back was triggered
-            if (cache->writePolicy == 1 && writeBack == 1) 
-            {
-                cache->cache_data.writesMem++;
-            }
-        }
+        read_miss(cache, operation, set_number, tag_address);
     }
-        // reset variables
-        cache->cache_data.hit = false;
+    
+    // reset variables
+    cache->cache_data.hit = false;
+}
+
+void read_miss(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
+{
+    bool fullSet = false;
+    bool setFull = false;
+    cache->cache_data.readsMem++;
+    cache->cache_data.totalMisses++;
+    if (!setFull)
+    {
+        if (cache->replacementPolicy == 0) // LRU replacement
+            fullSet = insertIntoFreeCacheLRU(cache, operation, set_number, tag_address);   
+
+        if (cache->replacementPolicy == 1) // FIFO replacement
+            fullSet = insertIntoFreeCacheFIFO(cache, operation, set_number, tag_address);
+    }
+
+    // checks for empty sets to place data and sets metadata to MRU data and decide which element to evict
+    if (fullSet)
+    {
+        int writeBack = 0;
+
+        // LRU replacement
+        if (cache->replacementPolicy == 0) 
+            writeBack = insertIntoFullCacheLRU(cache, operation, set_number, tag_address);
+        
+        // FIFO replacement
+        if (cache->replacementPolicy == 1) 
+            writeBack = insertIntoFullCacheFIFO(cache, operation, set_number, tag_address);
+        
+        // writes memory if a write back was triggered
+        if (cache->writePolicy == 1 && writeBack == 1) 
+        {
+            cache->cache_data.writesMem++;
+        }
     }
 }

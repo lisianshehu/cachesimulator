@@ -5,5 +5,6 @@
 #include "LRU.h"
 #include "FIFO.h"
 #include "meta_data.h"
-extern void perform_read(Cache *cache, string operation, int set_number, unsigned long long int tag_address);
+void read_operation_control(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
+void read_miss(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
 #endif
