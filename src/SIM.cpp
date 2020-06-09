@@ -18,10 +18,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 {   
-    int cacheSize = atoi(argv[1]);
+    int cache_size = atoi(argv[1]);
     int associativity = atoi(argv[2]);
-    int replacementPolicy = atoi(argv[3]);
-    int writePolicy = atoi(argv[4]);
+    int replacement_policy = atoi(argv[3]);
+    int write_policy = atoi(argv[4]);
     string tracefilepath = argv[5];
 
     double totalAccesses = 0;
@@ -29,11 +29,24 @@ int main(int argc, char** argv)
     string operation;
     string rawByteHexAddress;
    
+    Cache *cache;
     // derived values
-    int numberOfBlocks = cacheSize/(BLOCK_SIZE_BYTES*associativity);
+    int numberOfBlocks = cache_size/(BLOCK_SIZE_BYTES*associativity);
+
+    if (replacement_policy == 0)
+    {
+        cache = new LRUCache(numberOfBlocks, associativity, write_policy);
+    }
+    else if (replacement_policy == 1)
+    {
+        cache = new FIFOCache(numberOfBlocks, associativity, write_policy);
+    }
+    else
+    {
+        throw "Unrecognized replacement policy";
+    }
 
     //initialize cache arrays
-    Cache *cache = new Cache(numberOfBlocks, associativity, replacementPolicy, writePolicy);
     cache->initialize_cache();
     cache->initialize_metaData();
     cache->initialize_writeMetaData();
@@ -50,19 +63,19 @@ int main(int argc, char** argv)
         unsigned long long int byteAddressDec = stoul(rawByteHexAddress, 0, 16);
         unsigned long long int blockAddress = byteAddressDec/BLOCK_SIZE_BYTES;
         int setNumber = blockAddress % numberOfBlocks;
-        unsigned long long int tagAddress = (byteAddressDec/BLOCK_SIZE_BYTES);
+        unsigned long long int tag_address = (byteAddressDec/BLOCK_SIZE_BYTES);
 
         // write operation
         if (operation == "W")
         {
-            write_operation_control(cache, operation, setNumber, tagAddress);
+            write_operation_control(cache, operation, setNumber, tag_address);
 
             // reset variables
             cache->cache_data.hit = false;
         }
         else if (operation == "R") // read operation
         {   
-            read_operation_control(cache, operation, setNumber, tagAddress);
+            read_operation_control(cache, operation, setNumber, tag_address);
         }
     }
 
@@ -76,6 +89,8 @@ int main(int argc, char** argv)
     cout << cache->cache_data.writesMem << endl;
     cout << "Reads: ";
     cout << cache->cache_data.readsMem << endl;
+
+    delete cache;
 
 }
 

@@ -1,6 +1,6 @@
 #include "meta_data.h"
 using namespace std;
-// updates metadata for a read/write hit
+
 void updateMetaData (Cache *cache, int set_number)
 {
     for (int i = 0; i < cache->associativity; i++)
