@@ -7,13 +7,12 @@ void write_operation_control(Cache *cache, std::string operation, int set_number
         if (cache->cache[set_number][i] == tag_address)
         {
             cache->cache_data.hit = true;
-            cache->cache_data.totalHits++;
             cache->cache_data.indexHit = i;
             break;
         }
     }
 
-    if (cache->writePolicy == 0) // write-through
+    if (cache->write_policy == 0) // write-through
     {
         cache->cache_data.writesMem++;
     }
@@ -31,11 +30,10 @@ void write_operation_control(Cache *cache, std::string operation, int set_number
 
 void write_hit(Cache *cache, int set_number, unsigned long long int tag_address)
 {
-    if(cache->replacementPolicy == 0)
-        updateMetaData(cache, set_number);
+    cache->updateMetaData(cache, set_number);
 
     // mark cache block as dirty
-    if (cache->writePolicy == 1) // write-back
+    if (cache->write_policy == 1) // write-back
     {
         for (int i = 0; i < cache->associativity; i++)
         {
@@ -57,11 +55,7 @@ void write_miss(Cache *cache, std::string operation, int set_number, unsigned lo
 
     if (!setFull)
     {
-        if (cache->replacementPolicy == 0) // LRU replacement
-            fullSet = insertIntoFreeCacheLRU(cache, operation, set_number, tag_address);   
-
-        if (cache->replacementPolicy == 1) // FIFO replacement
-            fullSet = insertIntoFreeCacheFIFO(cache, operation, set_number, tag_address);
+        fullSet = cache->insert_into_free_cache(cache, operation, set_number, tag_address);
 
         setFull = false;
     }
@@ -71,13 +65,9 @@ void write_miss(Cache *cache, std::string operation, int set_number, unsigned lo
     {
         int writeBack = 0;
 
-        if (cache->replacementPolicy == 0) // LRU replacement
-            writeBack = insertIntoFullCacheLRU(cache, operation, set_number, tag_address);
+        writeBack = cache->insert_into_full_cache(cache, operation, set_number, tag_address);
         
-        if (cache->replacementPolicy == 1) // FIFO replacement
-            writeBack = insertIntoFullCacheFIFO(cache, operation, set_number, tag_address);
-        
-        if (cache->writePolicy == 1 && writeBack == 1)
+        if (cache->write_policy == 1 && writeBack == 1)
         {
             cache->cache_data.writesMem++;
         }
