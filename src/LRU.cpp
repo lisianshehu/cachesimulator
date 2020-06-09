@@ -2,7 +2,7 @@
 using namespace std;
 
 // inserts when there is free space in cache for LRU replacement 
-bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
+bool LRUCache::insert_into_free_cache (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
     if (cache->cache[set_number][cache->associativity-1] != -1)
     {
@@ -16,7 +16,6 @@ bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number
             {
                 cache->cache[set_number][i] = tag_address;
                 int newDataIndex = i;
-                // setFull = false;
                 for (int j = 0; j < cache->associativity; j++)
                 {
                     if (cache->metaData[set_number][j] > -1)
@@ -25,7 +24,7 @@ bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number
                     }
                 }
                 cache->metaData[set_number][newDataIndex] = 0;
-                if (operation == "W" && cache->writePolicy == 1)
+                if (operation == "W" && cache->write_policy == 1)
                 {
                     cache->writeMetaData[set_number][newDataIndex] = 1;
                 } 
@@ -37,7 +36,7 @@ bool insertIntoFreeCacheLRU (Cache *cache, std::string operation, int set_number
 }
 
 // inserts into cache that is full with LRU replacement 
-int insertIntoFullCacheLRU (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
+int LRUCache::insert_into_full_cache (Cache *cache, std::string operation, int set_number, unsigned long long int tag_address)
 {
     int writeBack = 0;
     int maxPosition = 0;
@@ -60,7 +59,7 @@ int insertIntoFullCacheLRU (Cache *cache, std::string operation, int set_number,
     }
 
     // write-back algorithim for writing to memory if there is a dirty bit in place
-    if (cache->writePolicy == 1)
+    if (cache->write_policy == 1)
     {
         writeBack = writeBackDataCheck(cache, set_number, LRUIndex, tag_address);
         if (operation == "R")
@@ -74,4 +73,16 @@ int insertIntoFullCacheLRU (Cache *cache, std::string operation, int set_number,
     }
     cache->metaData[set_number][LRUIndex] = 0;
     return writeBack;
+}
+
+void LRUCache::updateMetaData (Cache *cache, int set_number)
+{
+    for (int i = 0; i < cache->associativity; i++)
+    {
+        if ((cache->metaData[set_number][i] < cache->metaData[set_number][cache->cache_data.indexHit]))
+        {
+            cache->metaData[set_number][i]++;
+        }
+    }
+    cache->metaData[set_number][cache->cache_data.indexHit] = 0;
 }
