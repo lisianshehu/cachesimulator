@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     string operation;
     string rawByteHexAddress;
    
-   Cache *cache;
+    Cache *cache;
     // derived values
     int numberOfBlocks = cache_size/(BLOCK_SIZE_BYTES*associativity);
 
