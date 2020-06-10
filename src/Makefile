@@ -22,10 +22,6 @@ write_operations.o: Cache.h LRU.h FIFO.h meta_data.h
 
 .PHONY: clean run
 
-run : 
-	./sim 32768 8 0 1 ../tests/XSBENCH.t 
-	./sim 32768 8 0 0 ../tests/XSBENCH.t
-
 clean :
 	-rm *.o $(objects)
 	-rm $(TARGET)
