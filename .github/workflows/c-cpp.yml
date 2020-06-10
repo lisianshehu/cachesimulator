@@ -17,6 +17,8 @@ jobs:
           fetch-depth: 1
     - name: cd src
       run: cd src
+    - name: ls
+      run: ls
     - name: make
       run: make all
     - name: make check
