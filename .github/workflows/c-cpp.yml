@@ -15,10 +15,8 @@ jobs:
     - uses: actions/checkout@master
       with:
           fetch-depth: 1
-    - name: cd src && make
+    - name: Run make
       run: cd src && make
-    - name: make run
-      run: make run
-    - name: make clean
+    - name: Clean up files
       run: make clean
       
