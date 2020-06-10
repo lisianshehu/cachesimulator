@@ -9,20 +9,14 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@master
       with:
           fetch-depth: 1
-    - name: cd src
-      run: cd src
-    - name: ls
-      run: ls
     - name: cd src && make
       run: cd src && make
-    - name: ls
-      run: ls
     - name: make check
       run: make check
     - name: make run
