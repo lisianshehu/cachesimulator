@@ -20,3 +20,4 @@ jobs:
           fetch-depth: 1
     - name: cd src && make
       run: cd src && make
+      
