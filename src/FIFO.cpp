@@ -52,7 +52,7 @@ int FIFOCache::insert_into_full_cache(Cache *cache, std::string operation, int s
     // write-back algorithim for writing to memory if there is a dirty bit in place
     if (cache->write_policy == 1)
     {
-        writeBack = writeBackDataCheck(cache, set_number, FIFOIndex, tag_address);
+        writeBack = write_back_data_check(cache, set_number, FIFOIndex, tag_address);
         if (operation == "R")
         {
             cache->writeMetaData[set_number][FIFOIndex] = 0; // sets dirty bit to 0 for a read-miss when new cache block is allocated
@@ -67,7 +67,7 @@ int FIFOCache::insert_into_full_cache(Cache *cache, std::string operation, int s
     return writeBack;
 }
 
-void FIFOCache::updateMetaData(Cache *cache, int set_number)
+void FIFOCache::update_meta_data(Cache *cache, int set_number)
 {
     // no need to update meta data with FIFO replacement policy
     return;

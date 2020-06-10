@@ -47,3 +47,14 @@ void Cache::initialize_writeMetaData()
         }
     }
 }
+
+// checks for dirty bit to write back
+int Cache::write_back_data_check(Cache *cache, int set_number, int replcIndex, unsigned long long int tag_address)
+{
+    if (cache->writeMetaData[set_number][replcIndex] == 1)
+    {
+        return 1;
+    }
+
+    return 0;
+}

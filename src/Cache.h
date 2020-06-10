@@ -27,11 +27,12 @@ class Cache
         void initialize_cache();
         void initialize_metaData();
         void initialize_writeMetaData();
+        int write_back_data_check(Cache *cache, int set_number, int replcIndex, unsigned long long int tag_address);
 
         virtual bool insert_into_free_cache(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address) = 0;
         virtual int insert_into_full_cache(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address) = 0;
-        virtual void updateMetaData(Cache *cache, int set_number) = 0;
-
+        virtual void update_meta_data(Cache *cache, int set_number) = 0;
+    
     Cache(int num_blocks, int associativity, int write_policy)
     {
         this->num_blocks = num_blocks;
