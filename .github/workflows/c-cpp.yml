@@ -20,7 +20,7 @@ jobs:
     - name: ls
       run: ls
     - name: cd src && make
-      run: make all
+      run: cd src && make
     - name: ls
       run: ls
     - name: make check
