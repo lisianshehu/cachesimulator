@@ -30,7 +30,7 @@ void write_operation_control(Cache *cache, std::string operation, int set_number
 
 void write_hit(Cache *cache, int set_number, unsigned long long int tag_address)
 {
-    cache->updateMetaData(cache, set_number);
+    cache->update_meta_data(cache, set_number);
 
     // mark cache block as dirty
     if (cache->write_policy == 1) // write-back

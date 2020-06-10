@@ -4,7 +4,6 @@
 #include "Cache.h"
 #include "LRU.h"
 #include "FIFO.h"
-#include "meta_data.h"
 void read_operation_control(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
 void read_miss(Cache *cache, std::string operation, int set_number, unsigned long long int tag_address);
 #endif

@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include "LRU.h"
 #include "FIFO.h"
-#include "meta_data.h"
 #include "Cache.h"
 #include "read_operations.h"
 #include "write_operations.h"

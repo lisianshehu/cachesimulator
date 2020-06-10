@@ -16,7 +16,7 @@ void read_operation_control(Cache *cache, std::string operation, int set_number,
     if (cache->cache_data.hit)
     {
         // meta data is updated only for LRU cache
-        cache->updateMetaData(cache, set_number);            
+        cache->update_meta_data(cache, set_number);            
     }
     else if (!cache->cache_data.hit) // perform cache miss process
     {
