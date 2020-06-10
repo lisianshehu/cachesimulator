@@ -37,6 +37,8 @@ class Cache
         this->num_blocks = num_blocks;
         this->associativity = associativity;
         this->write_policy = write_policy;
-    }   
+    }
+
+    virtual ~Cache(){}
 };
 #endif
