@@ -12,8 +12,6 @@
 
 using namespace std;
 
-#define ADDRESS_SIZE_BITS 64
-#define WORD_SIZE_BYTES 16
 #define BLOCK_SIZE_BYTES 64
 
 int main(int argc, char** argv)
