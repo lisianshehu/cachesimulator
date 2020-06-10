@@ -3,13 +3,13 @@
 #include <math.h>
 #include <typeinfo>
 #include <stdlib.h>
+#include <algorithm.h>
 #include "LRU.h"
 #include "FIFO.h"
 #include "meta_data.h"
 #include "Cache.h"
 #include "read_operations.h"
 #include "write_operations.h"
-
 using namespace std;
 
 #define BLOCK_SIZE_BYTES 64
